@@ -8,7 +8,7 @@ import {
   styled
 } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SAUFRIEND from './../assets/saufriend.png';//Logo image
 import Profile from "./../assets/profile.png";
 
@@ -19,7 +19,7 @@ function Register() {
   const [userName, setUserName] = useState('');
   const [userPassword, setUserPassword] = useState('');
 
-
+  const navigator = useNavigate();
   const handleSelectFileClick = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -39,8 +39,32 @@ function Register() {
       }else if(userImage == null) { 
           alert('เลือกรูปด้วย') 
       }else{ 
-      //ส่งข้อมูลไปให้ API บันทึงลง DB แล้ว redirect ไปหน้า Login
-      console.log(userFullname, userEmail, userName, userPassword);
+      //Send data to API, save to DB and redirect to Login page.
+      //Packing data
+      const formData = new FormData();
+      formData.append('userImage', userImage);
+      formData.append('userFullname', userFullname);
+      formData.append('userEmail', userEmail);
+      formData.append('userName', userName);
+      formData.append('userPassword', userPassword);
+      //Send data to API
+      try {
+        const response = await fetch('http://localhost:4000/user/', {
+          method: 'POST',
+          body: formData,
+        });
+        if(response.status == 201){
+          alert("สมัครสมาชิกสําเร็จOwO");
+          navigator("/")
+          // window.location.href("/")
+        }else{
+          alert("สมัครสมาชิกไม่สำเร็จโปรดลองใหม่อีกครั้งTwT");
+        }
+      }
+      catch (error) {
+        alert("พบข้อผิดพลาดในการสมัครสมาชิก", error);
+
+      }
       }
   }
 
