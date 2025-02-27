@@ -49,7 +49,7 @@ function Register() {
       formData.append('userPassword', userPassword);
       //Send data to API
       try {
-        const response = await fetch('http://localhost:4000/user/', {
+        const response = await fetch("http://localhost:4000/user/", {
           method: 'POST',
           body: formData,
         });
@@ -82,6 +82,7 @@ function Register() {
   })
 
   return (
+    <>
     <Box sx={{width: '100%', height:'100vh' ,display:'flex', alignItems: 'center'}}>
       <Box sx={{width:'60%', boxShadow: 4, mx:'auto', my:'auto' ,p:5}}>
       {/* Head text =====================================*/}
@@ -149,6 +150,7 @@ function Register() {
 
       </Box>
     </Box>
+    </>
   )
 }
 

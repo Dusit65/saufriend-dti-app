@@ -30,8 +30,8 @@ function Login() {
           //get data Traveller and save in memory
           const data = await response.json()
           localStorage.setItem('user', JSON.stringify(data["data"]))
-          //go to (/mytravel)
-          navigator('/Myfriend')
+          //go to (/myfriend)
+          navigator('/myfriend')
           }else if(response.status == 404){
             alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง')
           }else{
@@ -69,11 +69,15 @@ function Login() {
 
          {/* TextField passwords  =====================================*/}
         <TextField fullWidth type='password' value={userPassword} onChange={(e) => setUserPassword(e.target.value)}/>
-        <Button variant='contained' onClick={handleLoginClick}fullWidth sx={{mt:2, py:2, backgroundColor: '#fa8805'}} >
+        
+        {/* btLogin============================================ */}
+        <Link onClick={handleLoginClick}>
+        <Button variant='contained' fullWidth sx={{mt:2, py:2, backgroundColor: '#fa8805'}} >
             LOGIN
         </Button>
+        </Link>
 
-        {/* Link to Resgister Page */}
+        {/* Link to Resgister Page ===================*/}
         <Link to='/register'style={{textDecoration: 'none', color: '#fa8805'}}>
         <Typography sx={{fontWeight: 'bold',mt:2 , mb:1, textAlign: 'center'}}>
           ลงทะเบียน
