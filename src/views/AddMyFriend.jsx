@@ -92,7 +92,7 @@ function AddMyFriend() {
 
       //send data from formData to API (http://localhost:4000/travel) POST
       try {
-        const response = await fetch("http://localhost:4000/myfriend/", {
+        const response = await fetch("http://localhost:5000/myfriend/", {
           method: "POST",
           body: formData,
         });
