@@ -51,7 +51,7 @@ function Register() {
       formData.append('userPassword', userPassword);
       //Send data to API
       try {
-        const response = await fetch("http://localhost:4000/user/", {
+        const response = await fetch("http://localhost:5000/user/", {
           method: 'POST',
           body: formData,
         });

@@ -23,7 +23,7 @@ function Login() {
     }else{
       //send data to API and go to MyTravel.jsx("/mytravel") GET
       try {
-        const response = await fetch(`http://localhost:4000/user/${userName}/${userPassword}`, { 
+        const response = await fetch(`http://localhost:5000/user/${userName}/${userPassword}`, { 
           method: 'GET',
         })
         if(response.status == 200){
