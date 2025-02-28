@@ -34,6 +34,8 @@ function Register() {
           alert('ป้อนชื่อ-นามสกุลด้วย') 
       }else if(userEmail.trim().length == 0){ 
           alert('ป้อนอีเมล์ด้วย') 
+      }else if( userName.trim().length == 0){ 
+          alert('ป้อนชื่อผู้ใช้ด้วย') 
       }else if(userPassword.trim().length == 0){ 
           alert('ป้อนรหัสผ่านด้วย') 
       }else if(userImage == null) { 
