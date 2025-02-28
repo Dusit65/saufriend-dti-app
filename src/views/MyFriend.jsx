@@ -52,7 +52,7 @@ function MyFriend() {
               <Avatar
               src={
                 userImage
-                  ? `http://localhost:4000/images/user/${userImage}`
+                  ? `http://localhost:5000/images/user/${userImage}`
                   : Profile
               }
             />
