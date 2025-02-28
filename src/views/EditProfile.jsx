@@ -83,21 +83,22 @@ function EditProfile() {
       formData.append("userEmail", userEmail);
       formData.append("userName", userName);
       formData.append("userPassword", userPassword);
+      formData.append("userId", userId);
       //Send data to API
       try {
-        const response = await fetch("http://localhost:5000/user/", {
-          method: "POST",
+        const response = await fetch(`http://localhost:5000/user/${userId}`, {
+          method: "PUT",
           body: formData,
         });
         if (response.status == 201) {
-          alert("สมัครสมาชิกสําเร็จOwO");
+          alert("แก้ไขโปรไฟล์สําเร็จOwO");
           navigator("/");
           // window.location.href("/")
         } else {
-          alert("สมัครสมาชิกไม่สำเร็จโปรดลองใหม่อีกครั้งTwT");
+          alert("แก้ไขโปรไฟล์ไม่สำเร็จโปรดลองใหม่อีกครั้งTwT");
         }
       } catch (error) {
-        alert("พบข้อผิดพลาดในการสมัครสมาชิก", error);
+        alert("พบข้อผิดพลาดในการแก้ไขโปรไฟล์", error);
       }
     }
   };
