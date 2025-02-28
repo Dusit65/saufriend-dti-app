@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -11,22 +11,37 @@ import {
   IconButton,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import FaceRetouchingNaturalIcon from '@mui/icons-material/FaceRetouchingNatural';
+import FaceRetouchingNaturalIcon from "@mui/icons-material/FaceRetouchingNatural";
 import { Link, useNavigate } from "react-router-dom";
 import SAUFRIEND from "./../assets/saufriend.png"; //Logo image
 import Profile from "./../assets/profile.png";
 
 function EditProfile() {
-  const [userImage, setUserImage] = useState('')
-  const [userFullname, setUserFullname] = useState('')
-  const [userEmail, setUserEmail] = useState('')
-  const [userName, setUserName] = useState('')
-  const [userPassword, setUserPassword] = useState('')
+  const [userImage, setUserImage] = useState("");
+  const [userFullname, setUserFullname] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+  const [userId, setUserId] = useState("");
 
   const [userNewImage, setUserNewImage] = useState(null);
 
   const navigator = useNavigate();
-  //select file func +++++++++++++++++++++++++++
+  //UseEffect ========================================
+  useEffect(() => {
+    //เอาข้อมูลใน memory มาแสดงที่ AppBar
+    //อ่านข้อมูลจาก memory เก็บในตัวแปร
+    const user = JSON.parse(localStorage.getItem("user"));
+    //เอาข้อมูลในตัวแปรกำหนดให้กับ state ที่สร้างไว้
+
+    setUserFullname(user.userFullname);
+    setUserImage(user.userImage);
+    setUserEmail(user.userEmail);
+    setUserName(user.userName);
+    setUserPassword(user.userPassword);
+    setUserId(user.userId);
+  }, []);
+  //Select file func +++++++++++++++++++++++++++
   const handleSelectFileClick = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -70,7 +85,7 @@ function EditProfile() {
       formData.append("userPassword", userPassword);
       //Send data to API
       try {
-        const response = await fetch("http://localhost:4000/user/", {
+        const response = await fetch("http://localhost:5000/user/", {
           method: "POST",
           body: formData,
         });
@@ -88,116 +103,173 @@ function EditProfile() {
   };
   return (
     <>
-    <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static" sx={{ backgroundColor: "orange" }}>
-            <Toolbar>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" sx={{ backgroundColor: "orange" }}>
+          <Toolbar>
             <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-                <FaceRetouchingNaturalIcon sx={{ color: "info" }} />
-              </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                My Friend DTI SAU
-              </Typography>
-              {/* Go to editprofile===============================*/}
-              <Link to="/editprofile">
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+              <FaceRetouchingNaturalIcon sx={{ color: "info" }} />
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              My Friend DTI SAU
+            </Typography>
+            {/* Go to editprofile===============================*/}
+            <Link to="/editprofile">
               <Button color="primary">{userFullname}</Button>
-              </Link>
-              {/* Avatar picture */}
-              <Avatar
+            </Link>
+            {/* Avatar picture */}
+            <Avatar
               src={
                 userImage
-                  ? `http://localhost:4000/images/user/${userImage}`
+                  ? `http://localhost:5000/images/user/${userImage}`
                   : Profile
               }
             />
-              <Link
-                to="/"
-                style={{
-                  color: "red",
-                  textDecoration: "none",
-                  marginLeft: "10px",
-                  fontWeight: "bold",
-                }}
-              >
-                LOG OUT
-              </Link>
-            </Toolbar>
-          </AppBar>
-          {/* AppBar====================================================== */}
-        </Box>
-    <Box sx={{width: '100%', height:'100vh' ,display:'flex', alignItems: 'center'}}>
-      <Box sx={{width:'60%', boxShadow: 4, mx:'auto', my:'auto' ,p:5}}>
-      {/* Head text =====================================*/}
-      <Typography variant='h5' sx={{textAlign: 'center', fontWeight: 'bold'}}>
-          SAU Friend DTI
-        </Typography>
-
-        {/* Logo image =====================================*/}
-        <Avatar src={SAUFRIEND} alt='travel logo'
-        sx={{width: 150, height: 150, mx: 'auto', my: 5}}></Avatar>
-
-        {/* Login text =====================================*/}
-        <Typography variant='h5' sx={{textAlign: 'center', fontWeight: 'bold' }}>
-          เข้าใช้งานระบบ
-        </Typography>
-
-        <Typography sx={{fontWeight: 'bold',mt:4, mb:1}}>
-          ชื่อ-สกุล
-        </Typography>
-        {/* TextField Fullname  =====================================*/}
-        <TextField fullWidth value={userFullname} onChange={(e) => setUserFullname(e.target.value)}/>
-
-        <Typography sx={{fontWeight: 'bold',mt:2, mb:1}}>
-          อีเมล
-        </Typography>
-        {/* TextField Email  =====================================*/}
-        <TextField fullWidth value={userEmail} onChange={(e) => setUserEmail(e.target.value)}/>
-
-        <Typography sx={{fontWeight: 'bold',mt:2, mb:1}}>
-          ชื่อผู้ใช้
-        </Typography>
-        {/* TextField Username  =====================================*/}
-        <TextField fullWidth value={userName} onChange={(e) => setUserName(e.target.value)}/>
-
-        <Typography sx={{fontWeight: 'bold',mt:2 , mb:1}}>
-          รหัสผ่าน
-        </Typography>
-         {/* TextField passwords  =====================================*/}
-        <TextField fullWidth type='password' value={userPassword} onChange={(e) => setUserPassword(e.target.value)}/>
-        
-        {/* Profile Image =====================================*/}
-        <Avatar src={userNewImage == null ? `http://localhost:4000/images/user/${userImage}` : URL.createObjectURL(userNewImage)} alt="profile logo"
-            sx={{ width: 150, height: 150, mx: 'auto', my: 3 }} variant="rounded" />
-
-        {/* btSelectFile   =====================================*/}
-        <Box sx={{
-            display: "flex",
-            justifyContent: "center",
-          }}>
-          <Button variant="contained" startIcon={<CloudUploadIcon />} sx={{mx:'auto'}} component="label">
-          อัปโหลดรูปภาพโปรไฟล์
-          <SelectFileBt type="file" accept="image/*" onChange={handleSelectFileClick}/>
-          </Button>
-          </Box>
-        {/* Register Button   =====================================*/}
-        <Button variant='contained' fullWidth sx={{mt:2, py:2, backgroundColor: '#fa8805'}}  >
-            Register
-        </Button>
-
-       {/* Link to Login =====================================*/}
-        <Link to='/'style={{textDecoration: 'none', color: '#fa8805'}}>
-        <Typography sx={{fontWeight: 'bold',mt:2 , mb:1, textAlign: 'center'}}>
-          กลับไปหน้าLogin
-        </Typography>
-        </Link>
-
+            <Link
+              to="/"
+              style={{
+                color: "red",
+                textDecoration: "none",
+                marginLeft: "10px",
+                fontWeight: "bold",
+              }}
+            >
+              LOG OUT
+            </Link>
+          </Toolbar>
+        </AppBar>
+        {/* AppBar====================================================== */}
       </Box>
-    </Box>
+      <Box
+        sx={{
+          width: "100%",
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Box sx={{ width: "60%", boxShadow: 4, mx: "auto", my: "auto", p: 5 }}>
+          {/* Head text =====================================*/}
+          <Typography
+            variant="h5"
+            sx={{ textAlign: "center", fontWeight: "bold" }}
+          >
+            SAU Friend DTI
+          </Typography>
+
+          {/* Logo image =====================================*/}
+          <Avatar
+            src={SAUFRIEND}
+            alt="travel logo"
+            sx={{ width: 150, height: 150, mx: "auto", my: 5 }}
+          ></Avatar>
+
+          {/* Login text =====================================*/}
+          <Typography
+            variant="h5"
+            sx={{ textAlign: "center", fontWeight: "bold" }}
+          >
+            แก้ไขโปรไฟล์
+          </Typography>
+
+          <Typography sx={{ fontWeight: "bold", mt: 4, mb: 1 }}>
+            ชื่อ-สกุล
+          </Typography>
+          {/* TextField userFullname  =====================================*/}
+          <TextField
+            fullWidth
+            value={userFullname}
+            onChange={(e) => setUserFullname(e.target.value)}
+          />
+
+          <Typography sx={{ fontWeight: "bold", mt: 2, mb: 1 }}>
+            อีเมล
+          </Typography>
+          {/* TextField userEmail  =====================================*/}
+          <TextField
+            fullWidth
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}
+          />
+
+          <Typography sx={{ fontWeight: "bold", mt: 2, mb: 1 }}>
+            ชื่อผู้ใช้
+          </Typography>
+          {/* TextField userName  =====================================*/}
+          <TextField
+            fullWidth
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+
+          <Typography sx={{ fontWeight: "bold", mt: 2, mb: 1 }}>
+            รหัสผ่าน
+          </Typography>
+          {/* TextField userPassword  =====================================*/}
+          <TextField
+            fullWidth
+            type="password"
+            value={userPassword}
+            onChange={(e) => setUserPassword(e.target.value)}
+          />
+
+          {/* Profile Image =====================================*/}
+          <Avatar
+            src={
+              userNewImage == null
+                ? `http://localhost:5000/images/user/${userImage}`
+                : URL.createObjectURL(userNewImage)
+            }
+            alt="profile logo"
+            sx={{ width: 150, height: 150, mx: "auto", my: 3 }}
+            variant="rounded"
+          />
+
+          {/* btSelectFile   =====================================*/}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              variant="contained"
+              startIcon={<CloudUploadIcon />}
+              sx={{ mx: "auto" }}
+              component="label"
+            >
+              อัปโหลดรูปภาพโปรไฟล์
+              <SelectFileBt
+                type="file"
+                accept="image/*"
+                onChange={handleSelectFileClick}
+              />
+            </Button>
+          </Box>
+          {/* Register Button   =====================================*/}
+          <Button
+            variant="contained"
+            fullWidth
+            sx={{ mt: 2, py: 2, backgroundColor: "#fa8805" }}
+          >
+            Register
+          </Button>
+
+          {/* Link to Login =====================================*/}
+          <Link to="/" style={{ textDecoration: "none", color: "#fa8805" }}>
+            <Typography
+              sx={{ fontWeight: "bold", mt: 2, mb: 1, textAlign: "center" }}
+            >
+              กลับไปหน้าLogin
+            </Typography>
+          </Link>
+        </Box>
+      </Box>
     </>
   );
 }
