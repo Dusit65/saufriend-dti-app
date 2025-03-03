@@ -78,21 +78,27 @@ function EditProfile() {
       //Send data to API, save to DB and redirect to Login page.
       //Packing data
       const formData = new FormData();
-      formData.append("userImage", userImage);
+
       formData.append("userFullname", userFullname);
       formData.append("userEmail", userEmail);
       formData.append("userName", userName);
       formData.append("userPassword", userPassword);
       formData.append("userId", userId);
+
+      if (userImage){
+        formData.append('userImage', userImage);
+      }
+
       //Send data to API
       try {
         const response = await fetch(`http://localhost:5000/user/${userId}`, {
           method: "PUT",
           body: formData,
         });
-        if (response.status == 201) {
+        if (response.status == 200) {
           alert("แก้ไขโปรไฟล์สําเร็จOwO");
-          navigator("/");
+          
+          navigator("/myfriend");
           // window.location.href("/")
         } else {
           alert("แก้ไขโปรไฟล์ไม่สำเร็จโปรดลองใหม่อีกครั้งTwT");
@@ -105,6 +111,7 @@ function EditProfile() {
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
+        {/* AppBar====================================================== */}
         <AppBar position="static" sx={{ backgroundColor: "orange" }}>
           <Toolbar>
             <IconButton
@@ -144,7 +151,7 @@ function EditProfile() {
             </Link>
           </Toolbar>
         </AppBar>
-        {/* AppBar====================================================== */}
+        
       </Box>
       <Box
         sx={{
@@ -253,13 +260,15 @@ function EditProfile() {
             </Button>
           </Box>
           {/* Register Button   =====================================*/}
+          <Link onClick={handleEditProfileClick}>
           <Button
             variant="contained"
             fullWidth
             sx={{ mt: 2, py: 2, backgroundColor: "#fa8805" }}
           >
-            Register
+            แก้ไขข้อมูลส่วนตัว
           </Button>
+          </Link>
 
           {/* Link to Login =====================================*/}
           <Link to="/" style={{ textDecoration: "none", color: "#fa8805" }}>
