@@ -15,40 +15,38 @@ import FaceRetouchingNaturalIcon from "@mui/icons-material/FaceRetouchingNatural
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Profile from "./../assets/profile.png";
 import SAUFRIEND from "./../assets/saufriend.png"; //Logo image
-function AddMyFriend() {
-  //เอาข้อมูลใน memory มาแสดงที่ AppBar
-  //อ่านข้อมูลจาก memory เก็บในตัวแปร
+//===========================End of Import======================================
+function EditMyFriend() {
   const [userFullname, setUserFullname] = useState("");
   const [userImage, setUserImage] = useState("");
 
-  //เอาข้อมูลในตัวแปรกำหนดให้กับ state ที่สร้างไว้
+  const [myfriendImage, setMyFriendImage] = useState("");
+  const [myfriendNewImage, setMyFriendNewImage] = useState(null);
 
-  const [myfriendImage, setMyFriendImage] = useState(null);
   const [myfriendFullname, setMyFriendFullname] = useState("");
   const [myfriendPhone, setMyFriendPhone] = useState("");
   const [myfriendAge, setMyFriendAge] = useState("");
   const [myfriendMajor, setMyFriendMajor] = useState("");
   const [userId, setUserId] = useState("");
 
-  const [myfriendNewImage, setMyFriendNewImage] = useState(null);
-
   const { myfriendId } = useParams();
-
   const navigator = useNavigate();
+
   //useEffect ========================================
   useEffect(() => {
     //take data from localstorage and show at AppBar
     //read data in memory
-
     const user = JSON.parse(localStorage.getItem("user"));
+
     //take data from variable and use with state
 
     setUserFullname(user.userFullname);
     setUserImage(user.userImage);
     setUserId(user.userId);
 
-    //GetSelectedMyFriend Func
-    const getMyFriend = async () => {
+    //Get data From DB of traveller that login and show in table
+    //GetSelectedTravel Func
+    const getThisFriend = async () => { 
       const resData = await fetch(
         `http://localhost:5000/myfriend/one/${myfriendId}`,
         {
@@ -66,12 +64,13 @@ function AddMyFriend() {
       setMyFriendImage(data["data"].myfriendImage);
     };
     //Call Func
-    getMyFriend();
+    getThisFriend();
   }, []);
+  //Edit Travel Func====================================
 
   //select file func +++++++++++++++++++++++++++
   const handleSelectFileClick = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files;
     if (file) {
       setMyFriendNewImage(file);
     }
@@ -89,12 +88,12 @@ function AddMyFriend() {
     width: 1,
   });
   //+++++++++++++++++++++++++++++++++++++++++++
-  const handleAddMyFriendClick = async (e) => {
+  const handleEditMyFriendClick = async (e) => {
     //Validate Register Button
     e.preventDefault();
     if (myfriendFullname.trim().length == 0) {
       alert("ป้อนชื่อ-นามสกุลด้วย");
-    } else if (myfriendPhone.trim().length == 0) {
+    } else if (myfriendPhone.length == 0) {
       alert("ป้อนเบอร์โทรศัพท์ด้วย");
     } else if (myfriendAge.length == 0) {
       alert("ป้อนอายุด้วย");
@@ -290,7 +289,7 @@ function AddMyFriend() {
             variant="contained"
             fullWidth
             sx={{ mt: 2, py: 2, backgroundColor: "#fa8805" }}
-            onClick={handleAddMyFriendClick}
+            onClick={handleEditMyFriendClick}
           >
             Save My Friend
           </Button>
@@ -312,4 +311,4 @@ function AddMyFriend() {
   );
 }
 
-export default AddMyFriend;
+export default EditMyFriend;
