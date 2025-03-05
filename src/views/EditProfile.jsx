@@ -16,6 +16,8 @@ import { Link, useNavigate } from "react-router-dom";
 import SAUFRIEND from "./../assets/saufriend.png"; //Logo image
 import Profile from "./../assets/profile.png";
 
+//===========================End of Import======================================
+
 function EditProfile() {
   const [userImage, setUserImage] = useState("");
   const [userFullname, setUserFullname] = useState("");
@@ -25,6 +27,7 @@ function EditProfile() {
   const [userId, setUserId] = useState("");
 
   const [userNewImage, setUserNewImage] = useState(null);
+  const [userNewFullname, setUserNewFullname] = useState(""); //*****/
 
   const navigator = useNavigate();
   //UseEffect ========================================
@@ -40,6 +43,8 @@ function EditProfile() {
     setUserName(user.userName);
     setUserPassword(user.userPassword);
     setUserId(user.userId);
+
+    setUserNewFullname(user.userFullname);
   }, []);
   //Select file func +++++++++++++++++++++++++++
   const handleSelectFileClick = (e) => {
@@ -64,7 +69,7 @@ function EditProfile() {
   const handleEditProfileClick = async (e) => {
     //Validate Register Button
     e.preventDefault();
-    if (userFullname.trim().length == 0) {
+    if (userNewFullname.trim().length == 0) {
       alert("ป้อนชื่อ-นามสกุลด้วย");
     } else if (userEmail.trim().length == 0) {
       alert("ป้อนอีเมล์ด้วย");
@@ -72,21 +77,19 @@ function EditProfile() {
       alert("ป้อนชื่อผู้ใช้ด้วย");
     } else if (userPassword.trim().length == 0) {
       alert("ป้อนรหัสผ่านด้วย");
-    } else if (userImage == null) {
-      alert("เลือกรูปด้วย");
     } else {
       //Send data to API, save to DB and redirect to Login page.
       //Packing data
       const formData = new FormData();
 
-      formData.append("userFullname", userFullname);
+      formData.append("userFullname", userNewFullname);
       formData.append("userEmail", userEmail);
       formData.append("userName", userName);
       formData.append("userPassword", userPassword);
       formData.append("userId", userId);
 
-      if (userImage){
-        formData.append('userImage', userImage);
+      if (userNewImage) {
+        formData.append("userImage", userNewImage);
       }
 
       //Send data to API
@@ -97,8 +100,10 @@ function EditProfile() {
         });
         if (response.status == 200) {
           alert("แก้ไขโปรไฟล์สําเร็จOwO");
-          
-          navigator("/myfriend");
+          localStorage.clear(); //clear old data
+          const data = await response.json();
+          localStorage.setItem("user", JSON.stringify(data["data"])); //set new data
+          navigator("/myfriend"); //go to MyFriend
           // window.location.href("/")
         } else {
           alert("แก้ไขโปรไฟล์ไม่สำเร็จโปรดลองใหม่อีกครั้งTwT");
@@ -121,7 +126,9 @@ function EditProfile() {
               aria-label="menu"
               sx={{ mr: 2 }}
             >
-              <FaceRetouchingNaturalIcon sx={{ color: "info" }} />
+              <Link to="/myfriend">
+                <FaceRetouchingNaturalIcon sx={{ color: "info" }} />
+              </Link>
             </IconButton>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               My Friend DTI SAU
@@ -151,7 +158,6 @@ function EditProfile() {
             </Link>
           </Toolbar>
         </AppBar>
-        
       </Box>
       <Box
         sx={{
@@ -191,8 +197,8 @@ function EditProfile() {
           {/* TextField userFullname  =====================================*/}
           <TextField
             fullWidth
-            value={userFullname}
-            onChange={(e) => setUserFullname(e.target.value)}
+            value={userNewFullname}
+            onChange={(e) => setUserNewFullname(e.target.value)}
           />
 
           <Typography sx={{ fontWeight: "bold", mt: 2, mb: 1 }}>
@@ -230,10 +236,12 @@ function EditProfile() {
           <Avatar
             src={
               userNewImage == null
-                ? `http://localhost:5000/images/user/${userImage}`
+                ? userImage == ""
+                  ? SAUFRIEND
+                  : `http://localhost:5000/images/user/${userImage}`
                 : URL.createObjectURL(userNewImage)
             }
-            alt="profile logo"
+            alt="Profile logo"
             sx={{ width: 150, height: 150, mx: "auto", my: 3 }}
             variant="rounded"
           />
@@ -261,13 +269,13 @@ function EditProfile() {
           </Box>
           {/* Register Button   =====================================*/}
           <Link onClick={handleEditProfileClick}>
-          <Button
-            variant="contained"
-            fullWidth
-            sx={{ mt: 2, py: 2, backgroundColor: "#fa8805" }}
-          >
-            แก้ไขข้อมูลส่วนตัว
-          </Button>
+            <Button
+              variant="contained"
+              fullWidth
+              sx={{ mt: 2, py: 2, backgroundColor: "#fa8805" }}
+            >
+              แก้ไขข้อมูลส่วนตัว
+            </Button>
           </Link>
 
           {/* Link to Login =====================================*/}
