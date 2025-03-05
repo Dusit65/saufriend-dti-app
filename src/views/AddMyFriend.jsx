@@ -16,7 +16,6 @@ import { Link, useNavigate } from "react-router-dom";
 import Profile from "./../assets/profile.png";
 import SAUFRIEND from "./../assets/saufriend.png"; //Logo image
 function AddMyFriend() {
-
   const [userFullname, setUserFullname] = useState("");
   const [userImage, setUserImage] = useState("");
 
@@ -122,21 +121,23 @@ function AddMyFriend() {
                 aria-label="menu"
                 sx={{ mr: 2 }}
               >
-                <FaceRetouchingNaturalIcon sx={{ color: "info" }} />
+                <Link to="/myfriend">
+                  <FaceRetouchingNaturalIcon sx={{ color: "info" }} />
+                </Link>
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 My Friend DTI SAU
               </Typography>
               {/* Go to editprofile===============================*/}
               <Link to="/editprofile">
-              <Button color="inherit">{userFullname}</Button>
+                <Button color="inherit">{userFullname}</Button>
               </Link>
               {/* Avatar picture */}
               <Avatar
                 src={
                   userImage == ""
                     ? Profile
-                    : `http://localhost:4000/images/user/${userImage}`
+                    : `http://localhost:5000/images/user/${userImage}`
                 }
               />
               <Link
@@ -195,7 +196,7 @@ function AddMyFriend() {
           <TextField
             fullWidth
             type="number"
-           value={myfriendPhone}
+            value={myfriendPhone}
             onChange={(e) => setMyFriendPhone(e.target.value)}
           />
 
