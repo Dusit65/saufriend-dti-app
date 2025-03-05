@@ -19,7 +19,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/myfriend" element={<MyFriend />} />
         <Route path="/editprofile" element={<EditProfile />} />
-        <Route path="/editmyfriend" element={<EditMyFriend />} />
+        <Route path="/editmyfriend/:travelId" element={<EditMyFriend />} />
         <Route path="/addmyfriend" element={<AddMyFriend />} />
       </Routes>
     </BrowserRouter>
